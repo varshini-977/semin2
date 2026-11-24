@@ -1,0 +1,11 @@
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import Movie from './src/models/Movie.js';
+dotenv.config();
+await mongoose.connect(process.env.MONGO_URI);
+const data=JSON.parse(fs.readFileSync(new URL('./data/movies.json',import.meta.url),'utf8'));
+await Movie.deleteMany({});
+await Movie.insertMany(data);
+console.log(`Seeded ${data.length} movies`);
+await mongoose.disconnect();
